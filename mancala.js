@@ -29,13 +29,21 @@ var game = (function () {
             b = inc(b, i);
         }
 
-        if (count(b,i) == 1 && !is_mancala(i)) {
+        if (count(b,i) == 1 && is_players_hole(i,p)) {
             b = inc(b, players_mancala(p), 1 + count(b, opposite(i)));
             b = zero(b, i);
             b = zero(b, opposite(i));
         }
 
         return b;
+    };
+
+    var is_players_hole = function (index, player) {
+        if (player == 0) {
+            return (index<6);
+        } else {
+            return ((index>6) && (index != 13));
+        }
     };
     
     var is_mancala = function (index) {
