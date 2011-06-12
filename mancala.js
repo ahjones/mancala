@@ -1,5 +1,13 @@
 var game = (function () {
     var init = function () {
+        /*    12 11 10 9  8  7         PLAYER 1               */
+        /* 13                  6                              */
+        /*    0  1  2  3  4  5         PLAYER 0               */
+        /*  ^                  ^                              */
+        /*  |                  +----   Mancala for player 0   */
+        /*  |                                                 */
+        /*  +-----------------------   Mancala for player 1   */
+
         /*           0                             1          */
         /*           0  1  2  3  4  5  6  7  8  9  0  1  2  3 */
         var board = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0];
