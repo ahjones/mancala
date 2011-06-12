@@ -29,7 +29,31 @@ var game = (function () {
             b = inc(b, i);
         }
 
+        if (count(b,i) == 1 && !is_mancala(i)) {
+            b = inc(b, players_mancala(p), 1 + count(b, opposite(i)));
+            b = zero(b, i);
+            b = zero(b, opposite(i));
+        }
+
         return b;
+    };
+    
+    var is_mancala = function (index) {
+        return (index == 6) || (index == 13);
+    };
+
+    var players_mancala = function (player) {
+        return [6,13][player];
+    };
+
+    var opposite = function (index) {
+        if (index == 6) {
+            return 13;
+        } else if (index == 13) {
+            return 6;
+        } else {
+            return 12 - index;
+        }
     };
 
     var player = function (index) {
@@ -40,10 +64,11 @@ var game = (function () {
         return board[index%14];
     };
 
-    var inc = function (board, index) {
-       var b = board.slice();
-       b[index%14]++;
-       return b;
+    var inc = function (board, index, amount) {
+        amount = amount || 1;
+        var b = board.slice();
+        b[index%14]+=amount;
+        return b;
     };
 
     var zero = function (board, index) {
