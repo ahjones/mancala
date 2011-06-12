@@ -1,4 +1,9 @@
 var game = (function () {
+    var NUM_HOLES = 14,
+        NUM_PLAYERS = 2,
+        P0_MANCALA = 6,
+        P1_MANCALA = 13;
+
     var init = function () {
         /*    12 11 10 9  8  7         PLAYER 1               */
         /* 13                  6                              */
@@ -22,13 +27,13 @@ var game = (function () {
             p = player(index);
 
         var next_index = function (index, player) {
-            var mancala = [6, 13],
+            var mancala = [P0_MANCALA, P1_MANCALA],
                 i = index;
 
-            if ((i+1) % 14 == mancala[(player+1) % 2]) {
-                return (i+2) % 14;
+            if ((i+1) % NUM_HOLES == mancala[(player+1) % NUM_PLAYERS]) {
+                return (i+2) % NUM_HOLES;
             }
-            return (i+1)%14;
+            return (i+1) % NUM_HOLES;
         };
 
         b = zero(board, i);
@@ -48,48 +53,48 @@ var game = (function () {
 
     var is_players_hole = function (index, player) {
         if (player == 0) {
-            return (index<6);
+            return (index<P0_MANCALA);
         } else {
-            return ((index>6) && (index != 13));
+            return ((index>P0_MANCALA) && (index != P1_MANCALA));
         }
     };
     
     var is_mancala = function (index) {
-        return (index == 6) || (index == 13);
+        return (index == P0_MANCALA) || (index == P1_MANCALA);
     };
 
     var players_mancala = function (player) {
-        return [6,13][player];
+        return [P0_MANCALA,P1_MANCALA][player];
     };
 
     var opposite = function (index) {
-        if (index == 6) {
-            return 13;
-        } else if (index == 13) {
-            return 6;
+        if (index == P0_MANCALA) {
+            return P1_MANCALA;
+        } else if (index == P1_MANCALA) {
+            return P0_MANCALA;
         } else {
             return 12 - index;
         }
     };
 
     var player = function (index) {
-        return (index<6) ? 0 : 1;
+        return (index<P0_MANCALA) ? 0 : 1;
     };
 
     var count = function (board, index) {
-        return board[index%14];
+        return board[index%NUM_HOLES];
     };
 
     var inc = function (board, index, amount) {
         amount = amount || 1;
         var b = board.slice();
-        b[index%14]+=amount;
+        b[index%NUM_HOLES]+=amount;
         return b;
     };
 
     var zero = function (board, index) {
         var b = board.slice();
-        b[index%14] = 0;
+        b[index%NUM_HOLES] = 0;
         return b;
     };
 
