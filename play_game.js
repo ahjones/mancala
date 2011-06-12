@@ -2,10 +2,11 @@ var play_game = function (game) {
     var board;
 
     var init = function () {
-        board = game.init();
+        board = game.init(show_turn);
         for (var i in board) {
             c(i).onclick = click;
         }
+        
         show();
     };
 
@@ -18,6 +19,10 @@ var play_game = function (game) {
     var click = function () {
         board = game.play(board, parseInt(this.id.replace("cell", "")));
         show();
+    };
+
+    var show_turn = function (player) {
+       g("turn").innerHTML = "Player " + player + "'s turn"; 
     };
 
     var c = function (index) {

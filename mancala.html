@@ -6,6 +6,7 @@
         <script type="text/javascript" src="play_game.js"></script>
     </head>
     <body>
+        <h1 id="turn">Go!</h1>
         <table border="2" cellpadding="4">
             <tr>
                 <td id="cell13" rowspan="2"></td>
@@ -26,7 +27,7 @@
                 <td id="cell5"></td>
             </tr>
         </table>
-
+        
         <script type="text/javascript">
            var player = play_game(game); 
            window.onload = player.init;

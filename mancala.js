@@ -1,10 +1,15 @@
 var game = (function () {
+    /* consts */
     var NUM_HOLES = 14,
         NUM_PLAYERS = 2,
         P0_MANCALA = 6,
         P1_MANCALA = 13;
 
-    var init = function () {
+    /* callbacks */
+    var turn,
+        win;
+
+    var init = function (turn_cb, win_cb) {
         /*    12 11 10 9  8  7         PLAYER 1               */
         /* 13                  6                              */
         /*    0  1  2  3  4  5         PLAYER 0               */
@@ -16,6 +21,9 @@ var game = (function () {
         /*           0                             1          */
         /*           0  1  2  3  4  5  6  7  8  9  0  1  2  3 */
         var board = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0];
+
+        turn = turn_cb || function () {};
+        win = win_cb || function () {};
 
         return board;
     };
@@ -42,13 +50,27 @@ var game = (function () {
             b = inc(b, i);
         }
 
+        if (is_players_mancala(i,p)) {
+            turn(p);
+            return b;
+        };
+
         if (count(b,i) == 1 && is_players_hole(i,p)) {
             b = inc(b, players_mancala(p), 1 + count(b, opposite(i)));
             b = zero(b, i);
             b = zero(b, opposite(i));
         }
 
+        turn(next_player(p));
         return b;
+    };
+
+    var next_player = function (player) {
+        return (player+1) % NUM_PLAYERS;
+    };
+
+    var is_players_mancala = function (index, player) {
+        return index == [P0_MANCALA,P1_MANCALA][player];
     };
 
     var is_players_hole = function (index, player) {
