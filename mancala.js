@@ -108,7 +108,7 @@ var game = (function () {
     };
 
     var is_players_mancala = function (index, player) {
-        return index == [P0_MANCALA,P1_MANCALA][player];
+        return index == players_mancala(player);
     };
 
     var is_players_hole = function (index, player) {
