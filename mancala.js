@@ -50,19 +50,57 @@ var game = (function () {
             b = inc(b, i);
         }
 
-        if (is_players_mancala(i,p)) {
-            turn(p);
-            return b;
-        };
-
         if (count(b,i) == 1 && is_players_hole(i,p)) {
             b = inc(b, players_mancala(p), 1 + count(b, opposite(i)));
             b = zero(b, i);
             b = zero(b, opposite(i));
         }
 
+        if (is_game_over(b)) {
+            win(get_result(board));
+            return b;
+        }
+
+        if (is_players_mancala(i,p)) {
+            turn(p);
+            return b;
+        };
+
         turn(next_player(p));
         return b;
+    };
+
+    var get_result = function (board) {
+        var sip = players_stones_in_play;
+        var sim = players_stones_in_mancala;
+
+        return {
+            result: [sip(board, 0)+sim(board, 0),
+                     sip(board, 1)+sim(board, 1)]
+        };
+    };
+
+    var is_game_over = function (board) {
+        var sip = players_stones_in_play;
+        return ((sip(board,0) == 0) || (sip(board,1) == 0));
+    };
+
+    var players_stones_in_play = function (board, player) {
+        var start = player * 7,
+            sum = 0;
+        for (var i = 0; i < 6; i++) {
+            sum += count(board, start+i);
+        }
+
+        return sum;
+    }
+
+    var players_stones_in_mancala = function (board, player) {
+        if (player == 0) {
+            return count(board, P0_MANCALA);
+        } else {
+            return count(board, P1_MANCALA);
+        }
     };
 
     var next_player = function (player) {
