@@ -3,13 +3,31 @@ var game = (function () {
     var NUM_HOLES = 14,
         NUM_PLAYERS = 2,
         P0_MANCALA = 6,
-        P1_MANCALA = 13;
+        P1_MANCALA = 13,
 
     /* callbacks */
-    var turn,
-        win;
+        turn,
+        win,
 
-    var init = function (turn_cb, win_cb) {
+    /* functions */
+        init,
+        play,
+        get_result,
+        is_game_over,
+        players_stones_in_play,
+        players_stones_in_mancala,
+        next_player,
+        is_players_mancala,
+        is_players_hole,
+        is_mancala,
+        players_mancala,
+        opposite,
+        player,
+        count,
+        inc,
+        zero;
+
+    init = function (turn_cb, win_cb) {
         /*    12 11 10 9  8  7         PLAYER 1               */
         /* 13                  6                              */
         /*    0  1  2  3  4  5         PLAYER 0               */
@@ -28,7 +46,7 @@ var game = (function () {
         return board;
     };
 
-    var play = function (board, index) {
+    play = function (board, index) {
         var b,
             c = count(board, index),
             i = index,
@@ -70,7 +88,7 @@ var game = (function () {
         return b;
     };
 
-    var get_result = function (board) {
+    get_result = function (board) {
         var sip = players_stones_in_play;
         var sim = players_stones_in_mancala;
 
@@ -80,12 +98,12 @@ var game = (function () {
         };
     };
 
-    var is_game_over = function (board) {
+    is_game_over = function (board) {
         var sip = players_stones_in_play;
         return ((sip(board,0) == 0) || (sip(board,1) == 0));
     };
 
-    var players_stones_in_play = function (board, player) {
+    players_stones_in_play = function (board, player) {
         var start = player * 7,
             sum = 0;
         for (var i = 0; i < 6; i++) {
@@ -95,7 +113,7 @@ var game = (function () {
         return sum;
     }
 
-    var players_stones_in_mancala = function (board, player) {
+    players_stones_in_mancala = function (board, player) {
         if (player == 0) {
             return count(board, P0_MANCALA);
         } else {
@@ -103,15 +121,15 @@ var game = (function () {
         }
     };
 
-    var next_player = function (player) {
+    next_player = function (player) {
         return (player+1) % NUM_PLAYERS;
     };
 
-    var is_players_mancala = function (index, player) {
+    is_players_mancala = function (index, player) {
         return index == players_mancala(player);
     };
 
-    var is_players_hole = function (index, player) {
+    is_players_hole = function (index, player) {
         if (player == 0) {
             return (index<P0_MANCALA);
         } else {
@@ -119,15 +137,15 @@ var game = (function () {
         }
     };
     
-    var is_mancala = function (index) {
+    is_mancala = function (index) {
         return (index == P0_MANCALA) || (index == P1_MANCALA);
     };
 
-    var players_mancala = function (player) {
+    players_mancala = function (player) {
         return [P0_MANCALA,P1_MANCALA][player];
     };
 
-    var opposite = function (index) {
+    opposite = function (index) {
         if (index == P0_MANCALA) {
             return P1_MANCALA;
         } else if (index == P1_MANCALA) {
@@ -137,22 +155,22 @@ var game = (function () {
         }
     };
 
-    var player = function (index) {
+    player = function (index) {
         return (index<P0_MANCALA) ? 0 : 1;
     };
 
-    var count = function (board, index) {
+    count = function (board, index) {
         return board[index%NUM_HOLES];
     };
 
-    var inc = function (board, index, amount) {
+    inc = function (board, index, amount) {
         amount = amount || 1;
         var b = board.slice();
         b[index%NUM_HOLES]+=amount;
         return b;
     };
 
-    var zero = function (board, index) {
+    zero = function (board, index) {
         var b = board.slice();
         b[index%NUM_HOLES] = 0;
         return b;
